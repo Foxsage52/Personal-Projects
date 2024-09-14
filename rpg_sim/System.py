@@ -1,4 +1,4 @@
-#Step one creating classes
+#Step one creating The system
 class System:
     def __init__(self, level, healthpoint, experience, attack, defense, m_defense, mana, speed):
         self.level = level         # Class level
@@ -40,6 +40,15 @@ class System:
 class Warrior(System):
     def __init__(self, level = 1, experience = 0, healthpoint=100, attack=20, defense=15, m_defense=10, mana=5, speed=10):
         super().__init__(level, healthpoint, experience, attack, defense, m_defense, mana, speed)
+    def level_up(self):
+        super().level_up()
+        self.healthpoint += 15
+        self.attack += 10
+        self.defense += 5
+        self.m_defense +=3
+        self.mana += 4
+        self.speed += 5
+        print(f"{self.__class__.__name__} leveled up! Stats increased.")
 
     
 
