@@ -11,6 +11,8 @@ class System:
         self.m_defense = m_defense             # Magic Defense
         self.mana = mana           # Special Resource
         self.speed = speed         # Turn order
+        self.moves = {}
+
     
     def gain_experience(self, amount):
         self.experience += amount
@@ -35,7 +37,9 @@ class System:
                 f"Defense: {self.defense}\n" 
                 f"M. Defense: {self.m_defense}\n"
                 f"Mana: {self.mana}\n"
-                f"Speed: {self.speed}\n")
+                f"Speed: {self.speed}\n"
+                f"Moves:\n{self.format_moves()}")
+                
     
     def format_moves(self):
         return "\n".join(f"{name}: {details}" for name, details in self.moves.items())
