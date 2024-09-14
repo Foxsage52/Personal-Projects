@@ -17,6 +17,9 @@ class Warrior(System):
         self.speed += 5
         print(f"{self.__class__.__name__} leveled up! Stats increased.")
         moves.update_warrior_moves(self)
+    
+    def format_moves(self):
+         return "\n".join(f"{name}: {details}" for name, details in self.moves.items())
 
 
     
