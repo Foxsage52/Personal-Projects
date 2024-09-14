@@ -25,9 +25,15 @@ class Character:
         return f"Congratulations! {self.level} reached!"
     
     def __str__(self):
-        return (f"{self.__class__.__name__}(Level: {self.level}, Health: {self.healthpoint}, "
-                f"Attack: {self.attack}, Defense: {self.defense}, Dexterity: {self.dex}, "
-                f"Mana: {self.mana}, Speed: {self.speed})")
+        return (f"{self.__class__.__name__}\n"
+                f"Level: {self.level}\n"
+                f"Experience: {self.experience}/{self.level_up_requirement()}\n"
+                f"Health: {self.healthpoint}\n"
+                f"Attack: {self.attack}\n"
+                f"Defense: {self.defense}\n" 
+                f"Dexterity: {self.dex}\n"
+                f"Mana: {self.mana}\n"
+                f"Speed: {self.speed}\n")
 
 
 
