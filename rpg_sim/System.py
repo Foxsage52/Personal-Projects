@@ -1,4 +1,6 @@
 #Step one creating The system
+#Establihsed stats
+#Created Leveling Sysetm
 class System:
     def __init__(self, level, healthpoint, experience, attack, defense, m_defense, mana, speed):
         self.level = level         # Class level
