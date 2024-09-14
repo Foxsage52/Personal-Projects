@@ -1,8 +1,12 @@
 from system import System
+import moves
 
 class Warrior(System):
     def __init__(self, level = 1, experience = 0, healthpoint=100, attack=20, defense=15, m_defense=10, mana=5, speed=10):
         super().__init__(level, healthpoint, experience, attack, defense, m_defense, mana, speed)
+        self.moves = moves.warrior_moves.copy()
+        moves.update_warrior_moves(self)
+        
     def level_up(self):
         super().level_up()
         self.healthpoint += 15
@@ -12,6 +16,8 @@ class Warrior(System):
         self.mana += 4
         self.speed += 5
         print(f"{self.__class__.__name__} leveled up! Stats increased.")
+        moves.update_warrior_moves(self)
+
 
     
 
