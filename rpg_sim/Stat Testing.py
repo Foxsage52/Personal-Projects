@@ -1,6 +1,6 @@
-import Classes
+import classes
 
-warrior = Classes.Warrior()
+warrior = classes.Warrior()
 
 print(warrior)
 warrior.gain_experience(60)
