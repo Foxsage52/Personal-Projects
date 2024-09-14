@@ -1,5 +1,5 @@
 #Step one creating classes
-class Character:
+class System:
     def __init__(self, level, healthpoint, experience, attack, defense, dex, mana, speed):
         self.level = level         # Class level
         self.healthpoint = healthpoint  # Hit points
@@ -37,15 +37,24 @@ class Character:
 
 
 
-class Warrior(Character):
-    pass
+class Warrior(System):
+    def __init__(self, level = 1, experience = 0, healthpoint=100, attack=20, defense=15, dex=10, mana=5, speed=10):
+        super().__init__(level, healthpoint, experience, attack, defense, dex, mana, speed)
 
-class Wizard(Character):
-    pass
+    
 
-class Rogue(Character):
-    pass
+class Wizard(System):
+    def __init__(self, level = 1, experience = 0, healthpoint=80, attack=15, defense=8, dex=12, mana=30, speed=12):
+        super().__init__(level, healthpoint, experience, attack, defense, dex, mana, speed)
+    
+    
+class Rogue(System):
+    def __init__(self, level = 1, experience = 0, healthpoint=90, attack=18, defense=12, dex=20, mana=10, speed=15):
+        super().__init__(level, healthpoint, experience, attack, defense, dex, mana, speed)
+     
 
-class Archer(Character):
-    pass
-
+class Archer(System):
+    def __init__(self, level = 1, experience = 0, healthpoint=85, attack=17, defense=10, dex=18, mana=8, speed=14):
+        super().__init__(level, healthpoint, experience, attack, defense, dex, mana, speed)
+        
+        
