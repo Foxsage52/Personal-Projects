@@ -1,6 +1,6 @@
 import Classes
 
-wizard = Classes.Wizard(level= 1, experience = 0, healthpoint = 10, attack = 10, defense = 5, mana = 10, dex = 20, speed = 15)
+wizard = Classes.Wizard()
 
-wizard.gain_experience(20)
+wizard.gain_experience(0)
 print(wizard)
