@@ -6,8 +6,8 @@ class System:
         self.experience = experience    # Level progress
         self.attack = attack       # Attack Power
         self.defense = defense     # Defensive prowess
-        self.m_defense = m_defense             # Dodge capability
-        self.mana = mana           # Special Attack
+        self.m_defense = m_defense             # Magic Defense
+        self.mana = mana           # Special Resource
         self.speed = speed         # Turn order
     
     def gain_experience(self, amount):
