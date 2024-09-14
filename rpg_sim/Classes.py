@@ -11,12 +11,18 @@ class Character:
         self.speed = speed         # Turn order
     
     def gain_experience(self, amount):
-        self.gain_experience += amount
+        self.experience += amount
         while self.experience >= self.level_up_requirement():
             self.level_up()
     
-    def level_up_requirement():
-        #Example Threshold; can be adjusted 
+    def level_up_requirement(self):
+        #Example Threshold; can be adjusted
+        return 50 * self.level
+    
+    def level_up(self):
+        self.experience -= self.level_up_requirement()
+        self.level +=1
+        return f"Congratulations! {self.level} reached!"
 
 
 class Warrior(Character):
