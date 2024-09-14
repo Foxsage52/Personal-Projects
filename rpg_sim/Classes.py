@@ -23,6 +23,11 @@ class Character:
         self.experience -= self.level_up_requirement()
         self.level +=1
         return f"Congratulations! {self.level} reached!"
+    
+    def __str__(self):
+        return (f"Level: {self.level}, Health: {self.healthpoint}, "
+                f"Attack: {self.attack}, Defense: {self.defense}, "
+                f"Dexterity: {self.dex}, Mana: {self.mana}, Speed: {self.speed}")
 
 
 class Warrior(Character):
@@ -36,3 +41,4 @@ class Rogue(Character):
 
 class Archer(Character):
     pass
+
