@@ -36,4 +36,6 @@ class System:
                 f"M. Defense: {self.m_defense}\n"
                 f"Mana: {self.mana}\n"
                 f"Speed: {self.speed}\n")
-
+    
+    def format_moves(self):
+        return "\n".join(f"{name}: {details}" for name, details in self.moves.items())
