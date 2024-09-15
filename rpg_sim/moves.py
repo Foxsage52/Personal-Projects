@@ -17,3 +17,20 @@ def update_warrior_moves(character):
             character.moves["Cleave"] = {"type": "special", "power": 25}
             character.moves["Stab"] = {"type": "basic", "power": 15}
             print("Warrior learned Cleave and Stab!")
+            
+wizard_moves = {
+    "Force": {"type": "basic", "power": 10},
+    "Ignite": {"type": "special", "power": 20},
+}
+
+# # Function to update wizard moves
+def update_wziard_moves(character):
+    if isinstance(character, classes.Wizard):
+        if character.level >= 5:
+            character.moves["Flare"] = {"type": "basic", "power": 15}
+            character.moves["Magic Bolt"] = {"type": "special", "power": 10}
+            print("Wizard learned Flare and Magic Bolt!")
+        if character.level >= 10:
+            character.moves["Fireball"] = {"type": "special", "power": 25}
+            character.moves["Smite"] = {"type": "basic", "power": 15}
+            print("Wizard learned Fireball and Smite!")
