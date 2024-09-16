@@ -1,4 +1,9 @@
 import classes
+# Universal Moves
+universal_moves = {
+    "Heal": {"type": "special", "power": 0, "heal": 20, "cost": 3},
+    "Block": {"type": "basic", "power": 0, "block": True},
+}
 
 # Base moves for Warrior
 warrior_moves = {
