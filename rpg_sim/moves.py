@@ -29,7 +29,7 @@ wizard_moves = {
 }
 
 # # Function to update wizard moves
-def update_wziard_moves(character):
+def update_wizard_moves(character):
     if isinstance(character, classes.Wizard):
         if character.level >= 5:
             character.moves["Flare"] = {"type": "basic", "power": 15, "regen": 1}
