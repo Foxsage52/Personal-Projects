@@ -1,11 +1,12 @@
 from System import System
+from moves import universal_moves
 import moves
 
 class Warrior(System):
     def __init__(self, level=1, experience=0, healthpoint=100, attack=20, m_attack=5, defense=15, m_defense=10, mana=5, speed=10):
         super().__init__(level, healthpoint, experience, attack, m_attack, defense, m_defense, mana, speed)
         self.m_attack = m_attack
-        self.moves = moves.warrior_moves.copy()
+        self.moves = {**moves.warrior_moves.copy(), **universal_moves}
         moves.update_warrior_moves(self)
 
     def level_up(self):
