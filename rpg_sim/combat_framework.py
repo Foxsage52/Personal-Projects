@@ -7,11 +7,11 @@ class Combat:
         # Flat reduction based on defense (defense / 2)
         flat_reduction = self.defender.defense / 2
         
-        # Calculate base damage based on whether it's a special move or not
+        # Calculate base damage
         if is_special:
-            base_damage = self.attacker.attack * attack_power
+            base_damage = (self.attacker.attack + attack_power * 2)  # Ensure 2:1 ratio
         else:
-            base_damage = self.attacker.attack + attack_power
+            base_damage = (self.attacker.attack + attack_power)
         
         # Apply flat reduction
         damage_after_flat = base_damage - flat_reduction
