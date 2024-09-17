@@ -19,7 +19,7 @@ def update_warrior_moves(character):
             character.moves["War Cry"] = {"type": "special", "power": 10, "cost": 2}
             print("Warrior learned Shield Bash and War Cry!")
         if character.level >= 10:
-            character.moves["Cleave"] = {"type": "special", "power": 25, "cost": 2 }
+            character.moves["Power Cleave"] = {"type": "special", "power": 25, "cost": 2 }
             character.moves["Stab"] = {"type": "basic", "power": 15, "regen": 1}
             print("Warrior learned Cleave and Stab!")
             
@@ -39,3 +39,21 @@ def update_wizard_moves(character):
             character.moves["Fireball"] = {"type": "special", "power": 25}
             character.moves["Smite"] = {"type": "basic", "power": 15, "regen": 1, "cost": 2}
             print("Wizard learned Fireball and Smite!")
+            
+            
+rogue = {
+    "Dagger Strike": {"type": "basic", "power": 10, "regen": 1},
+    "Back Stab": {"type": "special", "power": 20},
+}
+
+# # Function to update wizard moves
+def update_wizard_moves(character):
+    if isinstance(character, classes.Rogue):
+        if character.level >= 5:
+            character.moves["Barrage Strike"] = {"type": "basic", "power": 15, "regen": 1}
+            character.moves["Shadow Strike"] = {"type": "special", "power": 10, "cost": 2}
+            print("Rogue learned Barrage Strike and Shadow Strike!")
+        if character.level >= 10:
+            character.moves["Shadow Palm"] = {"type": "special", "power": 25}
+            character.moves["Plunge"] = {"type": "basic", "power": 15, "regen": 1, "cost": 2}
+            print("Wizard learned Back Stab and Plunge!")
