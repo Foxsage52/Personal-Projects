@@ -1,4 +1,4 @@
-from classes import  Warrior, Wizard, Rogue
+from classes import Warrior, Wizard, Rogue
 
 class Combat:
     def __init__(self, attacker, defender):
@@ -11,7 +11,7 @@ class Combat:
 
         move = self.attacker.moves[move_name]
         is_special = (move["type"] == "special")
-        
+
         if is_special:
             cost = move.get("cost", 0)  # Provide a default value of 0 if "cost" is not specified
             if self.attacker.mana < cost:
@@ -20,15 +20,26 @@ class Combat:
         else:
             self.attacker.mana += move.get("regen", 1)  # Default regen to 1 if not specified
 
+        if move["type"] == "heal":
+            return self.heal(move)
+
         # Calculate damage based on class-specific mechanics and defense mitigation
         damage = self.calculate_damage(move["power"], is_special)
-
         self.defender.healthpoint -= damage
 
         return (f"{self.attacker.__class__.__name__} used '{move_name}' on {self.defender.__class__.__name__}. "
                 f"It dealt {damage:.2f} damage! "
                 f"{self.defender.__class__.__name__}'s health is now {self.defender.healthpoint:.2f}. "
-                f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana}.")
+                f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana:.2f}.")
+
+    def heal(self, move):
+        heal_amount = self.attacker._max_health() * (move.get("heal", 0) / 100)
+
+        # Ensure healing does not exceed maximum health
+        self.attacker.healthpoint = min(self.attacker.healthpoint + heal_amount, self.attacker._max_health())
+        return (f"{self.attacker.__class__.__name__} used '{move.get('name', 'Heal')}'. "
+                f"Restored {heal_amount:.2f} HP! {self.attacker.__class__.__name__}'s health is now {self.attacker.healthpoint:.2f}. "
+                f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana:.2f}.")
 
     def calculate_damage(self, attack_power, is_special=False):
         # Flat reduction based on defense (defense / 2)
@@ -49,9 +60,9 @@ class Combat:
 
         elif isinstance(self.attacker, Rogue):
             if is_special:
-                base_damage = (self.attacker.m_attack * 0.5) + (self.attacker.attack * 0.5) + attack_power
+                base_damage = (self.attacker.m_attack * 0.75) + (self.attacker.attack * 0.75) + attack_power
             else:
-                base_damage = (self.attacker.m_attack * 0.5) + (self.attacker.attack * 0.5) + attack_power
+                base_damage = (self.attacker.m_attack * 0.75) + (self.attacker.attack * 0.75) + attack_power
 
         else:
             base_damage = self.attacker.attack + attack_power

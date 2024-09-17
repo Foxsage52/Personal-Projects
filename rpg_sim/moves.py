@@ -1,10 +1,10 @@
 import classes
-
 # Universal Moves
 universal_moves = {
-    "Heal": {"type": "special", "power": 0, "heal": 20, "cost": 3},
+    "Heal": {"type": "special", "power": 0, "heal": 10, "cost": 3},  # Adjusted heal to 10%
     "Block": {"type": "basic", "power": 0, "block": True, "regen": 1},
 }
+
 
 # Base moves for Warrior
 warrior_moves = {

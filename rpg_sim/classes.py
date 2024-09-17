@@ -11,13 +11,13 @@ class Warrior(System):
 
     def level_up(self):
         super().level_up()
-        self.healthpoint += 15
-        self.attack += 10
-        self.defense += 8
-        self.m_attack += 2
-        self.m_defense += 3
-        self.mana += 4
-        self.speed += 5
+        self.healthpoint += 25 
+        self.attack += 20 
+        self.defense += 20 
+        self.m_attack += 10 
+        self.m_defense += 10 
+        self.mana += 5 
+        self.speed += 10 
         print(f"{self.__class__.__name__} leveled up! Stats increased.")
         moves.update_warrior_moves(self)
 
@@ -33,13 +33,13 @@ class Wizard(System):
         
     def level_up(self):
         super().level_up()
-        self.healthpoint += 10
-        self.attack += 5
-        self.defense += 5
-        self.m_attack += 10
-        self.m_defense += 10
-        self.mana += 9
-        self.speed += 4
+        self.healthpoint += 15 
+        self.attack += 20 
+        self.defense += 10 
+        self.m_attack += 25 
+        self.m_defense += 10 
+        self.mana += 10 
+        self.speed += 8 
         print(f"{self.__class__.__name__} leveled up! Stats increased.")
         
     def format_moves(self):
@@ -54,13 +54,13 @@ class Rogue(System):
             
     def level_up(self):
         super().level_up()
-        self.healthpoint += 10
-        self.attack += 5
-        self.defense += 5
-        self.m_attack += 5
-        self.m_defense += 5
-        self.mana += 6
-        self.speed += 8
+        self.healthpoint += 18 
+        self.attack += 15 
+        self.defense += 15 
+        self.m_attack += 15 
+        self.m_defense += 15 
+        self.mana += 10 
+        self.speed += 15 
         print(f"{self.__class__.__name__} leveled up! Stats increased.")
         
     def format_moves(self):
