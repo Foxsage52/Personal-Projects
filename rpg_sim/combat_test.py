@@ -5,23 +5,20 @@ from combat_framework import Combat
 warrior = Warrior(level=5)
 wizard = Wizard(level=5)
 
-# Set up combat
+# Set up combat: Warrior attacks Wizard
 combat = Combat(attacker=warrior, defender=wizard)
 
-
-# Special Move usage
-# Warrior attacks with "Power Slash"
+# Warrior attacks with "Power Slash" (special move)
 print(combat.attack("Power Slash"))
 
-# Wizard uses "Ignite"
-combat.attacker = wizard
-print(combat.attack("Ignite"))
-
-#Setting up basic attack usage
-# Warrior attacks with "Slash"
-combat.attacker = warrior
+# Warrior attacks with "Slash" (basic move)
 print(combat.attack("Slash"))
 
-# Wizard uses "Force"
-combat.attacker = wizard
-print(combat.attack("Flare"))
+# Set up combat: Wizard attacks Warrior
+combat2 = Combat(attacker=wizard, defender=warrior)
+
+# Wizard attacks with "Ignite" (special move)
+print(combat2.attack("Ignite"))
+
+# Wizard attacks with "Force" (basic move)
+print(combat2.attack("Force"))
