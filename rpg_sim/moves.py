@@ -1,8 +1,9 @@
 import classes
+
 # Universal Moves
 universal_moves = {
     "Heal": {"type": "special", "power": 0, "heal": 20, "cost": 3},
-    "Block": {"type": "basic", "power": 0, "block": True},
+    "Block": {"type": "basic", "power": 0, "block": True, "regen": 1},
 }
 
 # Base moves for Warrior
@@ -25,10 +26,10 @@ def update_warrior_moves(character):
             
 wizard_moves = {
     "Force": {"type": "basic", "power": 10, "regen": 1},
-    "Ignite": {"type": "special", "power": 20},
+    "Ignite": {"type": "special", "power": 20, "cost": 3},  # Added default cost
 }
 
-# # Function to update wizard moves
+# Function to update wizard moves
 def update_wizard_moves(character):
     if isinstance(character, classes.Wizard):
         if character.level >= 5:
@@ -36,24 +37,23 @@ def update_wizard_moves(character):
             character.moves["Magic Bolt"] = {"type": "special", "power": 10, "cost": 2}
             print("Wizard learned Flare and Magic Bolt!")
         if character.level >= 10:
-            character.moves["Fireball"] = {"type": "special", "power": 25}
+            character.moves["Fireball"] = {"type": "special", "power": 25, "cost": 3}  # Added default cost
             character.moves["Smite"] = {"type": "basic", "power": 15, "regen": 1, "cost": 2}
             print("Wizard learned Fireball and Smite!")
             
-            
-rogue = {
+rogue_moves = {
     "Dagger Strike": {"type": "basic", "power": 10, "regen": 1},
-    "Back Stab": {"type": "special", "power": 20},
+    "Back Stab": {"type": "special", "power": 20, "cost": 3},  # Added default cost
 }
 
-# # Function to update wizard moves
-def update_wizard_moves(character):
+# Function to update rogue moves
+def update_rogue_moves(character):
     if isinstance(character, classes.Rogue):
         if character.level >= 5:
             character.moves["Barrage Strike"] = {"type": "basic", "power": 15, "regen": 1}
             character.moves["Shadow Strike"] = {"type": "special", "power": 10, "cost": 2}
             print("Rogue learned Barrage Strike and Shadow Strike!")
         if character.level >= 10:
-            character.moves["Shadow Palm"] = {"type": "special", "power": 25}
+            character.moves["Shadow Palm"] = {"type": "special", "power": 25, "cost": 3}  # Added default cost
             character.moves["Plunge"] = {"type": "basic", "power": 15, "regen": 1, "cost": 2}
-            print("Wizard learned Back Stab and Plunge!")
+            print("Rogue learned Back Stab and Plunge!")

@@ -1,9 +1,10 @@
-from classes import Warrior, Wizard
+from classes import Warrior, Wizard, Rogue
 from combat_framework import Combat
 
 # Create character instances
-warrior = Warrior(level=5)
-wizard = Wizard(level=5)
+warrior = Warrior(level=10)
+wizard = Wizard(level=10)
+rogue = Rogue(level=10)
 
 # Set up combat: Warrior attacks Wizard
 combat = Combat(attacker=warrior, defender=wizard)
@@ -22,3 +23,12 @@ print(combat2.attack("Ignite"))
 
 # Wizard attacks with "Force" (basic move)
 print(combat2.attack("Force"))
+
+# Set up combat: Rogue attacks Warrior
+combat3 = Combat(attacker=rogue, defender=warrior)
+
+# Rogue attacks with "Back Stab" (special move)
+print(combat3.attack("Back Stab"))
+
+# Rogue attacks with "Dagger Strike" (basic move)
+print(combat3.attack("Dagger Strike"))

@@ -3,32 +3,27 @@ class Combat:
         self.attacker = attacker
         self.defender = defender
 
-    def calculate_damage(self, attack_power, is_special=False):
-        # Flat reduction based on defense (defense / 2)
-        flat_reduction = self.defender.defense / 2
-        
-        # Calculate base damage
-        if is_special:
-            base_damage = (self.attacker.attack + attack_power * 2)  # Ensure 2:1 ratio
-        else:
-            base_damage = (self.attacker.attack + attack_power)
-        
-        # Apply flat reduction
-        damage_after_flat = base_damage - flat_reduction
-
-        # Cap defense reduction at 70% (minimum 30% of damage must go through)
-        final_damage = max(damage_after_flat, 0) * max(0.3, 1 - (self.defender.defense / 200))
-
-        # Ensure damage can't be lower than a minimum threshold (optional)
-        min_damage = 5  # Set a minimum damage threshold if needed
-        return max(final_damage, min_damage)
-
     def attack(self, move_name):
-        move = self.attacker.moves.get(move_name, {})
-        if move:
-            power = move.get("power", 0)
-            is_special = move.get("type") == "special"
-            damage = self.calculate_damage(power, is_special)
-            self.defender.healthpoint -= damage
-            return f"{self.attacker.__class__.__name__} attacked with {move_name}, dealing {damage:.2f} damage!"
-        return "Invalid move"
+        if move_name not in self.attacker.moves:
+            return f"{self.attacker.__class__.__name__} does not have the move '{move_name}'"
+
+        move = self.attacker.moves[move_name]
+        
+        if move["type"] == "special":
+            cost = move.get("cost", 0)  # Provide a default value of 0 if "cost" is not specified
+            if self.attacker.mana < cost:
+                return f"{self.attacker.__class__.__name__} does not have enough mana for '{move_name}'"
+            self.attacker.mana -= cost
+            damage = self.calculate_damage(move["power"], self.attacker.m_attack)
+        else:
+            damage = self.calculate_damage(move["power"], self.attacker.attack)
+            self.attacker.mana += move.get("regen", 1)  # Default regen to 1 if not specified
+
+        self.defender.healthpoint -= damage
+        return (f"{self.attacker.__class__.__name__} used '{move_name}' on {self.defender.__class__.__name__}. "
+                f"{self.defender.__class__.__name__}'s health is now {self.defender.healthpoint:.2f}. "
+                f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana}.")
+    
+    def calculate_damage(self, move_power, attack_stat):
+        # Basic damage calculation formula
+        return move_power + attack_stat * 0.5
