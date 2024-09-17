@@ -50,8 +50,3 @@ class Rogue(System):
     def __init__(self, level=1, experience=0, healthpoint=90, attack=18, m_attack=10, defense=12, m_defense=20, mana=10, speed=15):
         super().__init__(level, healthpoint, experience, attack, m_attack, defense, m_defense, mana, speed)
         self.m_attack = m_attack
-
-class Archer(System):
-    def __init__(self, level=1, experience=0, healthpoint=85, attack=17, m_attack=8, defense=10, m_defense=18, mana=8, speed=14):
-        super().__init__(level, healthpoint, experience, attack, m_attack, defense, m_defense, mana, speed)
-        self.m_attack = m_attack
