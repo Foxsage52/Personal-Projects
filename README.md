@@ -18,7 +18,40 @@ This is a simple text-based RPG game built using Python and Pygame. The game fea
    ```bash
    git clone <repository-url>
 Navigate to the project directory:
-   ```bash
-2. Navigate to the project directory:
+bash
+Copy code
+cd <project-directory>
+Install dependencies:
+bash
+Copy code
+pip install pygame
+Run the game script:
+bash
+Copy code
+python main.py
+Usage
+Main Menu: Select an option using the mouse or keyboard.
 
+Click "Start Game" to proceed to the class selection screen.
+Click "View Character" to view stats of each character class.
+Click "Quit" to exit the game.
+Class Selection: Choose a character class (Warrior, Wizard, Rogue) to start the game.
 
+Character Stats: View detailed stats of each character class on the character page.
+
+Key Files
+main.py: The main game script containing the core logic and user interface.
+classes.py: Contains definitions for character classes (Warrior, Wizard, Rogue).
+moves.py: Defines universal moves and their effects.
+combat.py: (To be implemented) Handles PvE combat mechanics and move management.
+Development
+Current Version: 0.5
+Next Steps:
+Implement combat mechanics.
+Develop NPC combat vs enemies and their mechanics.
+Improve user interface and add more interactions.
+Contact
+For any questions or feedback, please contact:
+
+Email: foxsage52@gmail.com
+GitHub: Foxsage52
