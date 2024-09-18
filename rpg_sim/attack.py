@@ -1,4 +1,4 @@
-from classes import Warrior, Wizard, Rogue  # Import only the classes used for attack logic.
+from classes import Warrior, Wizard, Rogue
 
 class Attack:
     def __init__(self, attacker, defender):

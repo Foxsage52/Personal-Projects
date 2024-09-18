@@ -1,7 +1,8 @@
-# Import mechanics from existing files like healing, restore, attack, etc.
+# combat_order.py
+
 import healing  # Manages healing logic
 import restore  # Manages restore logic
-import attack   # Manages attack logic
+from attack import Attack
 
 class Combat:
     def __init__(self, attacker, defender):
@@ -16,8 +17,8 @@ class Combat:
         if move_name in self.attacker.moves:
             move = self.attacker.moves[move_name]
             
-            if move["type"] == "attack":
-                return self.execute_attack(move)
+            if move["type"] == "basic" or move["type"] == "special":
+                return self.execute_attack(move_name)
             elif move["type"] == "heal":
                 return self.execute_heal(move)
             elif move["type"] == "restore":
@@ -27,10 +28,11 @@ class Combat:
         else:
             return f"{self.attacker.__class__.__name__} doesn't know '{move_name}'"
 
-    def execute_attack(self, move):
-        damage = attack.calculate_damage(self.attacker, self.defender, move)
-        self.defender.healthpoint -= damage
-        return f"{self.attacker.__class__.__name__} dealt {damage:.2f} damage to {self.defender.__class__.__name__}. Health remaining: {self.defender.healthpoint:.2f}"
+    def execute_attack(self, move_name):
+        move = self.attacker.moves[move_name]
+        attack_system = Attack(self.attacker, self.defender)
+        result = attack_system.perform_attack(move_name)
+        return result
 
     def execute_heal(self, move):
         heal_amount = healing.calculate_heal(self.attacker, move)
@@ -39,4 +41,3 @@ class Combat:
     def execute_restore(self, move):
         restore_amount = restore.calculate_restore(self.attacker, move)
         return f"{self.attacker.__class__.__name__} restored {restore_amount:.2f} mana."
-
