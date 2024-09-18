@@ -1,8 +1,7 @@
-import classes
+import classes  # No need to import individual classes as update functions are already class-specific.
 # Universal Moves
 universal_moves = {
     "Heal": {"type": "special", "power": 0, "heal": 10, "cost": 3},  # Adjusted heal to 10%
-    "Block": {"type": "basic", "power": 0, "block": True, "regen": 1},
 }
 
 

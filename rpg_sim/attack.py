@@ -1,11 +1,12 @@
-from classes import Warrior, Wizard, Rogue
+from classes import Warrior, Wizard, Rogue  # Import only the classes used for attack logic.
 
-class Combat:
+class Attack:
     def __init__(self, attacker, defender):
         self.attacker = attacker
         self.defender = defender
 
-    def attack(self, move_name):
+    def perform_attack(self, move_name):
+        """Performs an attack based on the chosen move."""
         if move_name not in self.attacker.moves:
             return f"{self.attacker.__class__.__name__} does not have the move '{move_name}'"
 
@@ -13,17 +14,15 @@ class Combat:
         is_special = (move["type"] == "special")
 
         if is_special:
-            cost = move.get("cost", 0)  # Provide a default value of 0 if "cost" is not specified
+            cost = move.get("cost", 0)
             if self.attacker.mana < cost:
                 return f"{self.attacker.__class__.__name__} does not have enough mana for '{move_name}'"
             self.attacker.mana -= cost
         else:
-            self.attacker.mana += move.get("regen", 1)  # Default regen to 1 if not specified
+            # Regenerate mana for normal attacks
+            self.attacker.mana += move.get("regen", 1)
 
-        if move["type"] == "heal":
-            return self.heal(move)
-
-        # Calculate damage based on class-specific mechanics and defense mitigation
+        # Calculate damage and apply to defender
         damage = self.calculate_damage(move["power"], is_special)
         self.defender.healthpoint -= damage
 
@@ -32,23 +31,13 @@ class Combat:
                 f"{self.defender.__class__.__name__}'s health is now {self.defender.healthpoint:.2f}. "
                 f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana:.2f}.")
 
-    def heal(self, move):
-        heal_amount = self.attacker._max_health() * (move.get("heal", 0) / 100)
-
-        # Ensure healing does not exceed maximum health
-        self.attacker.healthpoint = min(self.attacker.healthpoint + heal_amount, self.attacker._max_health())
-        return (f"{self.attacker.__class__.__name__} used '{move.get('name', 'Heal')}'. "
-                f"Restored {heal_amount:.2f} HP! {self.attacker.__class__.__name__}'s health is now {self.attacker.healthpoint:.2f}. "
-                f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana:.2f}.")
-
     def calculate_damage(self, attack_power, is_special=False):
-        # Flat reduction based on defense (defense / 2)
+        """Calculates damage based on class-specific mechanics and defense."""
         flat_reduction = self.defender.defense / 2
 
-        # Calculate base damage based on class and type of attack
         if isinstance(self.attacker, Warrior):
             if is_special:
-                base_damage = (self.attacker.attack + attack_power * 1.5)  # 1.5 ratio for special attacks
+                base_damage = (self.attacker.attack + attack_power * 1.5)  # 1.5x power for special attacks
             else:
                 base_damage = self.attacker.attack + attack_power
 
@@ -67,12 +56,10 @@ class Combat:
         else:
             base_damage = self.attacker.attack + attack_power
 
-        # Apply flat reduction
+        # Apply defense reduction
         damage_after_flat = base_damage - flat_reduction
-
-        # Cap defense reduction at 70% (minimum 30% of damage must go through)
         final_damage = max(damage_after_flat, 0) * max(0.3, 1 - (self.defender.defense / 200))
 
-        # Ensure damage can't be lower than a minimum threshold (optional)
-        min_damage = 5  # Set a minimum damage threshold if needed
+        # Minimum damage threshold
+        min_damage = 5
         return max(final_damage, min_damage)

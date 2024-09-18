@@ -1,4 +1,7 @@
+# enemy.py
+
 import random
+from restore import restore
 
 class Enemy:
     def __init__(self, name, player, base_healthpoint, base_attack, base_defense, base_speed, base_mana=0, moves=None):
@@ -27,31 +30,14 @@ class Enemy:
         self.moves["Restore"] = {"power": 0, "type": "special", "heal_percent": 25}
         self.heal_uses = 2  # Limit of 2 uses for the restore move
 
-    def __str__(self):
-        moves_str = "\n".join([f"{move}: {details}" for move, details in self.moves.items()])
-        return (f"{self.name}\n"
-                f"Level: {self.level}\n"
-                f"Health: {self.healthpoint:.2f}\n"
-                f"Attack: {self.attack:.2f}\n"
-                f"Defense: {self.defense:.2f}\n"
-                f"Mana: {self.mana:.2f}\n"
-                f"Speed: {self.speed:.2f}\n"
-                f"Moves:\n{moves_str}")
-
-    def display_stats(self):
-        return (f"{self.name} (Level {self.level}) Stats:\n"
-                f"Health: {self.healthpoint:.2f}\n"
-                f"Attack: {self.attack:.2f}\n"
-                f"Defense: {self.defense:.2f}\n"
-                f"Mana: {self.mana:.2f}")
-
     def choose_move(self):
-        """Choose a move based on the enemy's current health and restore used"""
+        """Choose a move based on the enemy's current health and restore uses."""
         if self.healthpoint <= self._max_health() * 0.25 and self.heal_uses > 0:
             self.heal_uses -= 1
+            restore.restore_health(self)  # Call the restore health function
             return "Restore"
         
-        normal_moves = [move for move in self.moves if self.moves[move]["type"] == "basic"]
+        normal_moves = [move for move in self.moves if self.moves[move]["type"] == "normal"]
         special_moves = [move for move in self.moves if self.moves[move]["type"] == "special"]
 
         if special_moves:
@@ -63,12 +49,17 @@ class Enemy:
         """Calculate max health based on scaling factor for comparison purposes."""
         return self.healthpoint / (random.uniform(1.1, 1.5))
 
-    def heal(self):
-        """Restore the enemy's health based on their max HP."""
-        heal_amount = self._max_health() * (self.moves["Restore"]["heal_percent"] / 100)
-        self.healthpoint = min(self.healthpoint + heal_amount, self._max_health())
+    def __str__(self):
+        """Provide a string representation of the enemy."""
+        return (f"{self.name}\n"
+                f"Level: {self.level}\n"
+                f"Health: {self.healthpoint:.2f}\n"
+                f"Attack: {self.attack:.2f}\n"
+                f"Defense: {self.defense:.2f}\n"
+                f"Mana: {self.mana:.2f}\n"
+                f"Speed: {self.speed:.2f}\n"
+                f"Moves: {', '.join(self.moves.keys())}")
 
-# Example subclasses
 class Goblin(Enemy):
     def __init__(self, player):
         super().__init__(
