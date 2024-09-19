@@ -1,5 +1,5 @@
 from classes import Warrior, Wizard, Rogue
-from combat_order import Combat
+from combat_order import CombatSystem
 from enemy import Goblin, Orc, Dragon
 
 # Create character and enemy instances
@@ -11,12 +11,16 @@ goblin = Goblin(player=warrior)   # Enemy instance for the warrior to fight
 orc = Orc(player=wizard)         # Enemy instance for the wizard to fight
 dragon = Dragon(player=rogue)    # Enemy instance for the rogue to fight
 
+print(goblin)
+print(orc)
+print(dragon)
+
 # Example combat scenarios
-combat_warrior_goblin = Combat(attacker=warrior, defender=goblin)
-print(combat_warrior_goblin.take_turn("Power Slash"))
+combat_warrior_goblin = CombatSystem(user=warrior, enemy=goblin)
+print(combat_warrior_goblin.combat_round("Power Slash"))
 
-combat_wizard_orc = Combat(attacker=wizard, defender=orc)
-print(combat_wizard_orc.take_turn("Ignite"))
+combat_wizard_orc = CombatSystem(user=wizard, enemy=orc)
+print(combat_wizard_orc.combat_round("Ignite"))
 
-combat_rogue_dragon = Combat(attacker=rogue, defender=dragon)
-print(combat_rogue_dragon.take_turn("Back Stab"))
+combat_rogue_dragon = CombatSystem(user=rogue, enemy=dragon)
+print(combat_rogue_dragon.combat_round("Back Stab"))

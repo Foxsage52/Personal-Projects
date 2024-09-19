@@ -1,43 +1,53 @@
-# combat_order.py
-
-import healing  # Manages healing logic
-import restore  # Manages restore logic
 from attack import Attack
+from blocking import Block
+from healing import healing
+from enemy import Enemy
+from restore import restore_health
 
-class Combat:
-    def __init__(self, attacker, defender):
-        self.attacker = attacker
-        self.defender = defender
+class CombatSystem:
+    def __init__(self, user, enemy):
+        self.user = user
+        self.enemy = enemy
 
-    def take_turn(self, move_name):
-        """
-        Determines the move for the attacker and applies it.
-        Handles whether the move is an attack, heal, or restore.
-        """
-        if move_name in self.attacker.moves:
-            move = self.attacker.moves[move_name]
-            
-            if move["type"] == "basic" or move["type"] == "special":
-                return self.execute_attack(move_name)
-            elif move["type"] == "heal":
-                return self.execute_heal(move)
-            elif move["type"] == "restore":
-                return self.execute_restore(move)
+    def user_turn(self, move_name):
+        # Handle user's move, including attack, block, or healing
+        if move_name == "Block":
+            block = Block(self.user)
+            return block.execute()
+
+        elif move_name == "Heal":
+            heal_move = self.user.moves.get("Heal")
+            if heal_move:
+                return healing(self.user, heal_move)
             else:
-                return "Unknown move type."
+                return f"{self.user.__class__.__name__} cannot use 'Heal'"
+
+        elif move_name in self.user.moves:
+            attack = Attack(self.user, self.enemy)
+            return attack.perform_attack(move_name)
         else:
-            return f"{self.attacker.__class__.__name__} doesn't know '{move_name}'"
+            return f"Invalid move choice: {move_name}"
 
-    def execute_attack(self, move_name):
-        move = self.attacker.moves[move_name]
-        attack_system = Attack(self.attacker, self.defender)
-        result = attack_system.perform_attack(move_name)
-        return result
+    def enemy_turn(self):
+        # Enemy chooses a move (random or based on logic) and attacks
+        chosen_move = self.enemy.choose_move()
+        if chosen_move == "Restore":
+            return restore_health(self.enemy)
+        else:
+            attack = Attack(self.enemy, self.user)
+            return attack.perform_attack(chosen_move)
 
-    def execute_heal(self, move):
-        heal_amount = healing.calculate_heal(self.attacker, move)
-        return f"{self.attacker.__class__.__name__} healed for {heal_amount:.2f} HP."
+    def combat_round(self, user_move):
+        # One full round of combat: user turn and enemy turn
+        user_action = self.user_turn(user_move)
+        if self.enemy.healthpoint <= 0:
+            return f"{self.enemy.name} has been defeated! {user_action}"
 
-    def execute_restore(self, move):
-        restore_amount = restore.calculate_restore(self.attacker, move)
-        return f"{self.attacker.__class__.__name__} restored {restore_amount:.2f} mana."
+        enemy_action = self.enemy_turn()
+        if self.user.healthpoint <= 0:
+            return f"{self.user.__class__.__name__} has been defeated! {enemy_action}"
+
+        return f"User Turn:\n{user_action}\n\nEnemy Turn:\n{enemy_action}"
+
+    def is_combat_over(self):
+        return self.user.healthpoint <= 0 or self.enemy.healthpoint <= 0

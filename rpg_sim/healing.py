@@ -1,6 +1,6 @@
 from classes import Warrior, Wizard, Rogue  # For healing moves applicable to these character types.
 
-def heal(attacker, move):
+def healing(attacker, move):
     """Handles healing for player characters."""
     heal_amount = attacker._max_health() * (move.get("heal", 0) / 100)
 
