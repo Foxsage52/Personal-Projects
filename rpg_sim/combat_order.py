@@ -19,7 +19,7 @@ class CombatSystem:
             self.block_active = True
             return block.execute()
 
-        elif move_name in ["Invigoration Shout", "Restore Body", "Blood Bath"]:
+        elif move_name in ["Invigorating Shout", "Restore Body", "Blood Bath"]:
             heal_move = self.user.moves.get(move_name)
             if heal_move:
                 return healing(self.user, heal_move, move_name)

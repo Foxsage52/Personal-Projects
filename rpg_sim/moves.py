@@ -12,7 +12,7 @@ universal_moves = {
 warrior_moves = {
     "Slash": {"type": "basic", "power": 15, "regen": 5},
     "Power Slash": {"type": "special", "power": 20, "cost": 5},
-    "Invigoration Shout": {"type": "special", "power": 0, "heal_percent": 50, "cost": 0}  # Restores 50% health and mana
+    "Invigorating Shout": {"type": "special", "power": 0, "heal_percent": 50, "cost": 0}  # Restores 50% health and mana
 }
 
 # Function to update Warrior moves
