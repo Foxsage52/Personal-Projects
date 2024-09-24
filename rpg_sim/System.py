@@ -2,40 +2,54 @@
 # Established stats
 # Created Leveling System
 class System:
-    def __init__(self, level, healthpoint, experience, attack, m_attack, defense, m_defense, mana, speed):
-        self.level = level           # Class level
-        self.healthpoint = healthpoint  # Hit points
-        self.experience = experience    # Level progress
-        self.attack = attack         # Physical Attack Power
-        self.m_attack = m_attack     # Magic Attack Power
-        self.defense = defense       # Defensive prowess
-        self.m_defense = m_defense   # Magic Defense
-        self.mana = mana             # Special Resource
-        self.speed = speed           # Turn order
-        self.moves = {}
+    def __init__(self, level, base_health, base_attack, base_m_attack, base_defense, base_m_defense, base_mana, base_speed):
+        self.level = level
+        self.base_health = base_health
+        self.base_attack = base_attack
+        self.base_m_attack = base_m_attack
+        self.base_defense = base_defense
+        self.base_m_defense = base_m_defense
+        self.base_mana = base_mana
+        self.base_speed = base_speed
+        self.update_stats()
 
-    def gain_experience(self, amount):
-        self.experience += amount
-        while self.experience >= self.level_up_requirement():
-            self.level_up()
+    def update_stats(self):
+        self.health = self.base_health + (self.level - 1) * self.health_gain()
+        self.attack = self.base_attack + (self.level - 1) * self.attack_gain()
+        self.m_attack = self.base_m_attack + (self.level - 1) * self.m_attack_gain()
+        self.defense = self.base_defense + (self.level - 1) * self.defense_gain()
+        self.m_defense = self.base_m_defense + (self.level - 1) * self.m_defense_gain()
+        self.mana = self.base_mana + (self.level - 1) * self.mana_gain()
+        self.speed = self.base_speed + (self.level - 1) * self.speed_gain()
 
-    def level_up_requirement(self):
-        # Example Threshold; can be adjusted
-        return 50 * self.level
+    def health_gain(self):
+        return 0
 
-    def level_up(self):
-        self.experience -= self.level_up_requirement()
-        self.level += 1
-        return f"Congratulations! {self.level} reached!"
+    def attack_gain(self):
+        return 0
+
+    def m_attack_gain(self):
+        return 0
+
+    def defense_gain(self):
+        return 0
+
+    def m_defense_gain(self):
+        return 0
+
+    def mana_gain(self):
+        return 0
+
+    def speed_gain(self):
+        return 0
 
     def __str__(self):
         return (f"{self.__class__.__name__}\n"
                 f"Level: {self.level}\n"
-                f"Experience: {self.experience}/{self.level_up_requirement()}\n"
-                f"Health: {self.healthpoint}\n"
+                f"Health: {self.health}\n"
                 f"Attack: {self.attack}\n"
                 f"Magic Attack: {self.m_attack}\n"
-                f"Defense: {self.defense}\n" 
+                f"Defense: {self.defense}\n"
                 f"Magic Defense: {self.m_defense}\n"
                 f"Mana: {self.mana}\n"
                 f"Speed: {self.speed}\n"
