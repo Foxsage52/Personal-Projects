@@ -1,3 +1,5 @@
+# attack.py
+
 from classes import Warrior, Wizard, Rogue
 
 class Attack:
@@ -24,11 +26,11 @@ class Attack:
 
         # Calculate damage and apply to defender
         damage = self.calculate_damage(move["power"], is_special)
-        self.defender.healthpoint -= damage
+        self.defender.health -= damage
 
         return (f"{self.attacker.__class__.__name__} used '{move_name}' on {self.defender.__class__.__name__}. "
                 f"It dealt {damage:.2f} damage! "
-                f"{self.defender.__class__.__name__}'s health is now {self.defender.healthpoint:.2f}. "
+                f"{self.defender.__class__.__name__}'s health is now {self.defender.health:.2f}. "
                 f"{self.attacker.__class__.__name__}'s mana is now {self.attacker.mana:.2f}.")
 
     def calculate_damage(self, attack_power, is_special=False):

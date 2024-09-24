@@ -1,10 +1,9 @@
 import pygame
 import sys
-from pygame.locals import QUIT, MOUSEBUTTONDOWN, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_b
+from pygame.locals import QUIT, MOUSEBUTTONDOWN, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_b, K_SPACE
 from classes import Warrior, Wizard, Rogue
 from enemy import Goblin, Orc, Dragon
 from combat_order import CombatSystem
-import restore
 import moves  # Import the moves module
 
 # Constants
@@ -23,11 +22,6 @@ CLASS_SELECTION_ITEMS = {
     'warrior': 'Warrior',
     'wizard': 'Wizard',
     'rogue': 'Rogue'
-}
-ENEMY_SELECTION_ITEMS = {
-    'goblin': 'Goblin',
-    'orc': 'Orc',
-    'dragon': 'Dragon'
 }
 
 # Initialize Pygame
@@ -63,17 +57,7 @@ def draw_class_selection(selected_class):
         color = HIGHLIGHT_COLOR if selected_class == item else TEXT_COLOR
         draw_text(label, font, color, window, 20, y_offset)
         y_offset += FONT_SIZE * 2
-    draw_text("Press 'Enter' to select class, 'B' to go back", font, TEXT_COLOR, window, 20, WINDOW_HEIGHT - 40)
-    pygame.display.update()
-
-def draw_enemy_selection(selected_enemy):
-    window.fill(BACKGROUND_COLOR)
-    y_offset = 20
-    for item, label in ENEMY_SELECTION_ITEMS.items():
-        color = HIGHLIGHT_COLOR if selected_enemy == item else TEXT_COLOR
-        draw_text(label, font, color, window, 20, y_offset)
-        y_offset += FONT_SIZE * 2
-    draw_text("Press 'Enter' to select enemy, 'B' to go back", font, TEXT_COLOR, window, 20, WINDOW_HEIGHT - 40)
+    draw_text("Press 'Enter' or 'Space' to select class, 'B' to go back", font, TEXT_COLOR, window, 20, WINDOW_HEIGHT - 40)
     pygame.display.update()
 
 def draw_battle_screen(character, enemy, move_list, selected_move_index):
@@ -125,12 +109,12 @@ def draw_character_page():
     
     for character in characters:
         draw_text(character.__class__.__name__, font, TEXT_COLOR, window, column_positions["name"], y_offset)
-        draw_text(f"{character.level:.2f}", font, TEXT_COLOR, window, column_positions["level"], y_offset)
-        draw_text(f"{character.healthpoint:.2f}", font, TEXT_COLOR, window, column_positions["hp"], y_offset)
-        draw_text(f"{character.attack:.2f}", font, TEXT_COLOR, window, column_positions["attack"], y_offset)
-        draw_text(f"{character.defense:.2f}", font, TEXT_COLOR, window, column_positions["defense"], y_offset)
-        draw_text(f"{character.mana:.2f}", font, TEXT_COLOR, window, column_positions["mana"], y_offset)
-        draw_text(f"{character.speed:.2f}", font, TEXT_COLOR, window, column_positions["speed"], y_offset)
+        draw_text(f"{character.level}", font, TEXT_COLOR, window, column_positions["level"], y_offset)
+        draw_text(f"{character.health_gain()}", font, TEXT_COLOR, window, column_positions["hp"], y_offset)
+        draw_text(f"{character.attack}", font, TEXT_COLOR, window, column_positions["attack"], y_offset)
+        draw_text(f"{character.defense}", font, TEXT_COLOR, window, column_positions["defense"], y_offset)
+        draw_text(f"{character.mana}", font, TEXT_COLOR, window, column_positions["mana"], y_offset)
+        draw_text(f"{character.speed}", font, TEXT_COLOR, window, column_positions["speed"], y_offset)
         y_offset += FONT_SIZE * 2
     
     draw_text("Press 'B' to go back", font, TEXT_COLOR, window, 20, WINDOW_HEIGHT - 40)
@@ -142,15 +126,21 @@ def main():
     in_game = False
     show_character_page = False
     show_class_selection = False
-    show_enemy_selection = False
     show_battle_screen = False
     selected_item = 'start_game'
     selected_class = 'warrior'
-    selected_enemy = 'goblin'
     character = None
     enemy = None
     move_list = []
     selected_move_index = 0
+    combat_system = None
+    battle_sequence = [
+        {"enemy": Goblin, "level": 1},
+        {"enemy": Orc, "level": 5},
+        {"enemy": Orc, "level": 10},
+        {"enemy": Dragon, "level": 15}
+    ]
+    current_battle_index = 0
 
     while True:
         for event in pygame.event.get():
@@ -160,21 +150,20 @@ def main():
             elif event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     mouse_x, mouse_y = event.pos
-                    if not in_game and not show_character_page and not show_class_selection and not show_enemy_selection and not show_battle_screen:
+                    if not in_game and not show_character_page and not show_class_selection and not show_battle_screen:
                         y_offset = 20
                         for item in MENU_ITEMS.keys():
                             text_rect = draw_text(MENU_ITEMS[item], font, TEXT_COLOR, window, 20, y_offset)
                             if text_rect.collidepoint(mouse_x, mouse_y):
+                                selected_item = item
                                 if item == 'start_game':
                                     show_class_selection = True
                                     show_character_page = False
-                                    show_enemy_selection = False
                                     show_battle_screen = False
                                     in_game = False
                                 elif item == 'view_character':
                                     show_character_page = True
                                     show_class_selection = False
-                                    show_enemy_selection = False
                                     show_battle_screen = False
                                     in_game = False
                                 elif item == 'quit':
@@ -182,8 +171,22 @@ def main():
                                     sys.exit()
                             y_offset += FONT_SIZE * 2
             elif event.type == KEYDOWN:
-                if event.key == K_RETURN:
-                    if show_class_selection:
+                if event.key == K_RETURN or event.key == K_SPACE:
+                    if not in_game and not show_character_page and not show_class_selection and not show_battle_screen:
+                        if selected_item == 'start_game':
+                            show_class_selection = True
+                            show_character_page = False
+                            show_battle_screen = False
+                            in_game = False
+                        elif selected_item == 'view_character':
+                            show_character_page = True
+                            show_class_selection = False
+                            show_battle_screen = False
+                            in_game = False
+                        elif selected_item == 'quit':
+                            pygame.quit()
+                            sys.exit()
+                    elif show_class_selection:
                         if selected_class:
                             if selected_class == 'warrior':
                                 character = Warrior(level=1)
@@ -197,44 +200,52 @@ def main():
 
                             # Get the character's move list for battle
                             move_list = list(character.moves.keys())
-                            show_enemy_selection = True
                             show_class_selection = False
-                    elif show_enemy_selection:
-                        if selected_enemy:
-                            if selected_enemy == 'goblin':
-                                enemy = Goblin(player=character)
-                            elif selected_enemy == 'orc':
-                                enemy = Orc(player=character)
-                            elif selected_enemy == 'dragon':
-                                enemy = Dragon(player=character)
-                            
-                            # Get the character's move list for battle
-                            move_list = list(character.moves.keys())
                             show_battle_screen = True
-                            show_enemy_selection = False
+                            in_game = True
+                            current_battle_index = 0
+                            enemy = battle_sequence[current_battle_index]["enemy"](player=character)
+                            combat_system = CombatSystem(character, enemy)
                     elif show_battle_screen:
-                        pass  # Handle move selection
+                        if combat_system:
+                            user_move = move_list[selected_move_index]
+                            combat_result = combat_system.combat_round(user_move)
+                            print(combat_result)  # Print the combat result to the console for now
+                            if combat_system.is_combat_over():
+                                current_battle_index += 1
+                                if current_battle_index < len(battle_sequence):
+                                    character.level = battle_sequence[current_battle_index]["level"]
+                                    if isinstance(character, Warrior):
+                                        moves.update_warrior_moves(character)
+                                    elif isinstance(character, Wizard):
+                                        moves.update_wizard_moves(character)
+                                    elif isinstance(character, Rogue):
+                                        moves.update_rogue_moves(character)
+                                    move_list = list(character.moves.keys())
+                                    enemy = battle_sequence[current_battle_index]["enemy"](player=character)
+                                    combat_system = CombatSystem(character, enemy)
+                                else:
+                                    show_battle_screen = False
+                                    in_game = False
                     elif show_character_page:
                         show_character_page = False
                 elif event.key == K_UP:
-                    if show_class_selection:
+                    if not in_game and not show_character_page and not show_class_selection and not show_battle_screen:
+                        selected_item = list(MENU_ITEMS.keys())[(list(MENU_ITEMS.keys()).index(selected_item) - 1) % len(MENU_ITEMS)]
+                    elif show_class_selection:
                         selected_class = list(CLASS_SELECTION_ITEMS.keys())[(list(CLASS_SELECTION_ITEMS.keys()).index(selected_class) - 1) % len(CLASS_SELECTION_ITEMS)]
-                    elif show_enemy_selection:
-                        selected_enemy = list(ENEMY_SELECTION_ITEMS.keys())[(list(ENEMY_SELECTION_ITEMS.keys()).index(selected_enemy) - 1) % len(ENEMY_SELECTION_ITEMS)]
                     elif show_battle_screen:
                         selected_move_index = (selected_move_index - 1) % len(move_list)
                 elif event.key == K_DOWN:
-                    if show_class_selection:
+                    if not in_game and not show_character_page and not show_class_selection and not show_battle_screen:
+                        selected_item = list(MENU_ITEMS.keys())[(list(MENU_ITEMS.keys()).index(selected_item) + 1) % len(MENU_ITEMS)]
+                    elif show_class_selection:
                         selected_class = list(CLASS_SELECTION_ITEMS.keys())[(list(CLASS_SELECTION_ITEMS.keys()).index(selected_class) + 1) % len(CLASS_SELECTION_ITEMS)]
-                    elif show_enemy_selection:
-                        selected_enemy = list(ENEMY_SELECTION_ITEMS.keys())[(list(ENEMY_SELECTION_ITEMS.keys()).index(selected_enemy) + 1) % len(ENEMY_SELECTION_ITEMS)]
                     elif show_battle_screen:
                         selected_move_index = (selected_move_index + 1) % len(move_list)
                 elif event.key == K_b:
                     if show_class_selection:
                         show_class_selection = False
-                    elif show_enemy_selection:
-                        show_enemy_selection = False
                     elif show_battle_screen:
                         show_battle_screen = False
                         show_class_selection = True
@@ -245,12 +256,10 @@ def main():
                     # Handle other keys or inputs
                     pass
 
-        if not in_game and not show_character_page and not show_class_selection and not show_enemy_selection and not show_battle_screen:
+        if not in_game and not show_character_page and not show_class_selection and not show_battle_screen:
             draw_start_menu(selected_item)
         elif show_class_selection:
             draw_class_selection(selected_class)
-        elif show_enemy_selection:
-            draw_enemy_selection(selected_enemy)
         elif show_battle_screen:
             draw_battle_screen(character, enemy, move_list, selected_move_index)
         elif show_character_page:
